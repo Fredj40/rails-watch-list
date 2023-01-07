@@ -1,20 +1,15 @@
 First of all make sure you've created a rails app
 
 ```bash
-rails new APP_NAME
+rails new -j webpack APP_NAME
 ```
 
 ## Setup
 
-Ensure you have Bootstrap:
-
-```ruby
-# Gemfile
-gem "bootstrap"
-```
+Ensure you have Bootstrap and it's dependencies:
 
 ```bash
-bundle install
+yarn add bootstrap @popperjs/core
 ```
 
 Ensure you have the following gems in your Rails `Gemfile`:
@@ -27,6 +22,13 @@ gem "sassc-rails"
 gem "autoprefixer-rails"
 gem "font-awesome-sass", "~> 6.1"
 gem "simple_form", github: "heartcombo/simple_form"
+```
+
+Add this line to `assets.rb`:
+
+```ruby
+# Add additional assets to the asset load path.
+Rails.application.config.assets.paths << Rails.root.join("node_modules")
 ```
 
 ⚠ To this day (March, 9th, 2022), Simple Form support of Bootstrap 5 has been merged in `main` but has not been released yet. To use a version of Simple Form which supports Bootstrap 5, we need to install the gem from GitHub and we've added the specific `components/_form_legend_clear.scss` partial in our stylesheets.
@@ -42,8 +44,8 @@ Then replace Rails' stylesheets by Le Wagon's stylesheets:
 
 ```bash
 rm -rf app/assets/stylesheets
-curl -L https://github.com/lewagon/stylesheets/archive/vue.zip > stylesheets.zip
-unzip stylesheets.zip -d app/assets && rm stylesheets.zip && mv app/assets/rails-stylesheets-vue app/assets/stylesheets
+curl -L https://github.com/lewagon/stylesheets/archive/master.zip > stylesheets.zip
+unzip stylesheets.zip -d app/assets && rm stylesheets.zip && mv app/assets/rails-stylesheets-master app/assets/stylesheets
 ```
 
 **On Ubuntu/Windows**: if the `unzip` command returns an error, please install it first by running `sudo apt install unzip`.
@@ -52,14 +54,7 @@ Note that when you update the colors in `config/colors`, the (text) color of you
 
 ## Bootstrap JS
 
-Add Bootstrap in importmaps:
-
-```ruby
-# config/importmap.rb
-pin "jquery", to: "https://ga.jspm.io/npm:jquery@3.6.0/dist/jquery.js"
-pin "bootstrap", to: "https://ga.jspm.io/npm:bootstrap@5.1.3/dist/js/bootstrap.esm.js"
-pin "@popperjs/core", to: "https://ga.jspm.io/npm:@popperjs/core@2.11.5/lib/index.js"
-```
+Import Bootstrap:
 
 ```js
 // app/javascript/packs/application.js
@@ -79,7 +74,8 @@ Look at your main `application.scss` file to see how SCSS files are imported. Th
 @import "config/bootstrap_variables";
 
 // External libraries
-@import "bootstrap";
+@import "bootstrap/scss/bootstrap"; // from the node_modules
+@import "font-awesome-sprockets";
 @import "font-awesome";
 
 // Your CSS partials
