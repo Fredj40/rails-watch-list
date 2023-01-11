@@ -1,0 +1,24 @@
+
+<h1><strong><%= @list.name %></strong></h1>
+
+<% if @list.photo.attached? %>
+<%= cl_image_tag @list.photo.key, width: 400, height: 400 %>
+<% else %>
+<p> No image</p>
+<% end %>
+
+<ul>
+  <% @list.bookmarks.each do |bookmark| %>
+    <li>
+    <%= bookmark.movie.title %>
+    <br>
+    <%= bookmark.comment %>
+    <%= link_to "Delete", bookmark_path(bookmark, list), data: {turbo_method: :delete, turbo_confirm: "Are you sure?"} %>
+    </li>
+    <% end %>
+</div>
+
+<div>
+  <%= link_to "Back to lists", lists_path %>
+<br>
+</div>

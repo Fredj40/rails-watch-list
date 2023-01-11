@@ -74,3 +74,5 @@ gem "sassc-rails" # Uncomment this line
 gem 'faker'
 gem 'rspec-rails', group: [ :test ]
 gem 'rails-controller-testing', group: [ :test ]
+gem 'cloudinary'
+gem "dotenv-rails", groups: [:development, :test]
